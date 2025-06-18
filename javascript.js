@@ -34,12 +34,12 @@ class Gameboard {
         ship.length = coords.length;
 
         coords.forEach(coord => {
-            this.board.set(coord, ship);
+            this.board.set(coord, {ship: ship, isHit: false});
         });
         return ship;
     }
 
-    receiveAttack(coords) {
+    receiveAttack(coord) {
         // has it hit a ship? if so, call ship.hit() on correct ship.
         // if not, record the coords so it can be crossed off of already shot at positions.
     }
