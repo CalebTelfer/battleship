@@ -6,12 +6,15 @@ class Ship {
     }
 
     hit() {
-        //increases num of hits
-        // should check for isSunk() after.
+        this.timesHit += 1;
     }
 
     isSunk() {
-        // true or false based on timesHit compared to ship length.
+        if (this.timesHit >= this.length) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
 
