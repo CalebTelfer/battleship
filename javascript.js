@@ -34,10 +34,9 @@ class Gameboard {
         ship.length = coords.length;
 
         coords.forEach(coord => {
-            // may have to string literal here.
-            // as coord may be a reference in memory, not the actual hashmap key string we want assigned.
             this.board.set(coord, ship);
         });
+        return ship;
     }
 
     receiveAttack(coords) {
@@ -56,3 +55,5 @@ class Player {
         this.board = new Gameboard();
     }
 }
+
+module.exports = {Gameboard, Ship, Player};
