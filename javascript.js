@@ -2,6 +2,7 @@ class Ship {
     constructor() {
         this.length = 0;
         this.timesHit = 0;
+        this.board = "";
         this.sunk = false;
     }
 
@@ -11,6 +12,7 @@ class Ship {
 
     isSunk() {
         if (this.timesHit >= this.length) {
+            this.board.aliveShips -= 1;
             return true;
         } else {
             return false;
@@ -21,6 +23,7 @@ class Ship {
 class Gameboard {
     constructor() {
         this.board = new Map();
+        this.aliveShips = 0;
         //perhaps every grid is a key
         // which will either reference a
         // ship or null if empty grid.
@@ -31,6 +34,7 @@ class Gameboard {
 
     placeShip(coords) {
         const ship = new Ship();
+        ship.board = this;
         ship.length = coords.length;
 
         coords.forEach(coord => {
@@ -40,9 +44,6 @@ class Gameboard {
     }
 
     receiveAttack(coord) {
-        // has it hit a ship? if so, call ship.hit() on correct ship.
-        // if not, record the coords so it can be crossed off of already shot at positions.
-
         const square = this.board.get(coord);
 
         if (square && square.ship) {
@@ -57,7 +58,11 @@ class Gameboard {
     }
 
     allShipsSunk() {
-        //check if all ships are sunken.
+        if(this.aliveShips == 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }
