@@ -1,0 +1,11 @@
+.players-container {
+    display: flex;
+}
+
+.game-container {
+    display: flex;
+}
+
+.board-container {
+    display: flex;
+}
