@@ -1,8 +1,8 @@
-class Ship {
+export class Ship {
     constructor() {
         this.length = 0;
         this.timesHit = 0;
-        this.board = "";
+        this.board = undefined;
         this.sunk = false;
     }
 
@@ -20,16 +20,10 @@ class Ship {
     }
 }
 
-class Gameboard {
+export class Gameboard {
     constructor() {
         this.board = new Map();
         this.aliveShips = 0;
-        //perhaps every grid is a key
-        // which will either reference a
-        // ship or null if empty grid.
-
-        //grid is A:1-10 , J:1-10
-        //key could be ex. A1 or C3.
     }
 
     placeShip(coords) {
@@ -67,7 +61,7 @@ class Gameboard {
 
 }
 
-class Player {
+export class Player {
     constructor() {
         this.board = new Gameboard();
     }
