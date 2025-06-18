@@ -20,11 +20,24 @@ class Ship {
 
 class Gameboard {
     constructor() {
+        this.board = new Map();
+        //perhaps every grid is a key
+        // which will either reference a
+        // ship or null if empty grid.
 
+        //grid is A:1-10 , J:1-10
+        //key could be ex. A1 or C3.
     }
 
-    placeShip() {
-        //calls ship class to place a ship
+    placeShip(coords) {
+        const ship = new Ship();
+        ship.length = coords.length;
+
+        coords.forEach(coord => {
+            // may have to string literal here.
+            // as coord may be a reference in memory, not the actual hashmap key string we want assigned.
+            this.board.set(coord, ship);
+        });
     }
 
     receiveAttack(coords) {
