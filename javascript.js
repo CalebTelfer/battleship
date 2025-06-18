@@ -42,6 +42,18 @@ class Gameboard {
     receiveAttack(coord) {
         // has it hit a ship? if so, call ship.hit() on correct ship.
         // if not, record the coords so it can be crossed off of already shot at positions.
+
+        const square = this.board.get(coord);
+
+        if (square && square.ship) {
+            square.isHit = true;
+            square.ship.hit();
+            return true;
+
+        } else { // if no ship there
+            this.board.set(coord, {ship: undefined, isHit: true});
+            return false;
+        }
     }
 
     allShipsSunk() {
