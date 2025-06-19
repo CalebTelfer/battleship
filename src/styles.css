@@ -9,3 +9,8 @@
 .board-container {
     display: flex;
 }
+
+.player-board, .cpu-board {
+    display: grid;
+    grid-template: repeat(10, 1fr) / repeat(10, 1fr);
+}
