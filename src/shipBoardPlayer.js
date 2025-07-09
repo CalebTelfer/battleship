@@ -66,5 +66,3 @@ export class Player {
         this.board = new Gameboard();
     }
 }
-
-module.exports = {Gameboard, Ship, Player};

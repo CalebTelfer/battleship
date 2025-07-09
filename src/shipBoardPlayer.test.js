@@ -1,4 +1,4 @@
-const {Gameboard, Ship, Player} = require('./shipBoardPlayer.js');
+import {Gameboard, Ship, Player} from "./shipBoardPlayer.js"
 
 test('One ship can be placed', () => {
     const board = new Gameboard();
