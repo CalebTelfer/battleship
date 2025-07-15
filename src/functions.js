@@ -112,3 +112,17 @@ for (let i = 0; i < 121; i++) {
     cpuBoard.appendChild(cpuSquare);
 }
 }
+
+
+export function gameStartDOM() {
+  document.querySelector("#start-button").remove();
+
+  const container = document.querySelector(".buttons-container");
+  const instructions = document.createElement("h2");
+  instructions.textContent = "Click a square to place ship!";
+  container.appendChild(instructions);
+
+  const button = document.createElement("button");
+  button.textContent = "Place Ship"
+  container.appendChild(button);
+}

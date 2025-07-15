@@ -1,6 +1,6 @@
 import {Ship, Gameboard, Player} from "./shipBoardPlayer.js";
 import "./styles.css";
-import { initBoardSquares, numberToLetter } from "./functions.js";
+import { gameStartDOM, initBoardSquares, numberToLetter } from "./functions.js";
 
 // Main event listener file. drive the game from here.
 
@@ -23,6 +23,9 @@ initBoardSquares();
 const startButton = document.querySelector("#start-button");
 
 startButton.addEventListener("click", (e) => {
-    //Logic to begin user input for placement.
-    //DOM manipulation: remove this button -> append select / place buttons.
+    gameState.gameStarted = true;
+    gameState.playerMove = true;
+    gameState.playerPlacingShip = true;
+
+    gameStartDOM();
 })
