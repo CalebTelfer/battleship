@@ -42,6 +42,20 @@ for (let i = 0; i < 121; i++) {
         playerSquare.appendChild(playernumberText);
     }
 
+
+
+    // if is a clickable square not row or column
+    let row = Math.floor(i/11);
+    let col = i % 11;
+
+    if (row > 0 && col > 0) {
+      const rowClass = numberToLetter(row); // A–J
+      const colClass = col.toString();      // 1–10
+  
+      playerSquare.classList.add(rowClass, colClass);
+      cpuSquare.classList.add(rowClass, colClass);
+    }
+
     playerSquare.addEventListener("click", (e) => {
         if (!gameState.gameStarted) {
           return;
