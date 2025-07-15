@@ -1,9 +1,18 @@
-import { gameState } from ".";
+import { gameState, player } from ".";
 
 export function numberToLetter(n) {
     if (n >= 0 && n < 26) {
       return String.fromCharCode(97 + n); // 97 is 'a'
     }
+}
+
+export function letterToNumber(letter) {
+  const lower = letter.toLowerCase();
+  const code = lower.charCodeAt(0);
+  if (code >= 97 && code <= 122) {
+    return code - 97; // 'a' = 0, 'b' = 1, ..., 'z' = 25
+  }
+  return null; // invalid input
 }
 
 export function initBoardSquares() {
@@ -52,8 +61,9 @@ for (let i = 0; i < 121; i++) {
       const rowClass = numberToLetter(row); // A–J
       const colClass = col.toString();      // 1–10
   
-      playerSquare.classList.add(rowClass, colClass);
-      cpuSquare.classList.add(rowClass, colClass);
+      playerSquare.classList.add(rowClass, colClass, "gameSquare", i);
+      cpuSquare.classList.add(rowClass, colClass, "gameSquare", i);
+
     }
 
     playerSquare.addEventListener("click", (e) => {
@@ -76,6 +86,7 @@ for (let i = 0; i < 121; i++) {
         if (gameState.playerMove) {
           if (gameState.playerPlacingShip) {
             //place player ship
+            placeShip(e.target);
           } else {
             return; // else firing at own board
           }
@@ -125,4 +136,28 @@ export function gameStartDOM() {
   const button = document.createElement("button");
   button.textContent = "Place Ship"
   container.appendChild(button);
+}
+
+function placeShip(square) {
+  const squareCoords = square.classList;
+  let squareColumn = letterToNumber(squareCoords[0]);
+  let coords = [squareCoords[0] + squareCoords[1]]; // eg ["A1"]
+
+  const playersBoard = player.board;
+
+  let shipLength = 0;
+  switch (playersBoard.totalShips) {
+    case 0: shipLength = 5; break;
+    case 1: shipLength = 4; break;
+    case 2: shipLength = 3; break;
+    case 3: shipLength = 3; break;
+    case 4: shipLength = 2; break;
+  }
+
+  for(let i = 0; i < shipLength-1; i++) {
+    squareColumn = squareColumn + 1;
+    let squareColumnLetter = numberToLetter(squareColumn);
+    let nextSquare = document.querySelector(".a.currentthing+11")
+    if(document.querySelector)
+  }
 }

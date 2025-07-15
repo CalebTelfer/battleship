@@ -18,6 +18,9 @@ export const gameState = {
     cpuFiring: false
 }
 
+export const player = new Player();
+export const cpu = new Player();
+
 initBoardSquares();
 
 const startButton = document.querySelector("#start-button");

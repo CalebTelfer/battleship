@@ -24,6 +24,7 @@ export class Gameboard {
     constructor() {
         this.board = new Map();
         this.aliveShips = 0;
+        this.totalShips = 0;
     }
 
     placeShip(coords) {
@@ -34,6 +35,8 @@ export class Gameboard {
         coords.forEach(coord => {
             this.board.set(coord, {ship: ship, isHit: false});
         });
+
+        this.totalShips += 1;
         return ship;
     }
 
