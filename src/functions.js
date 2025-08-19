@@ -54,14 +54,15 @@ for (let i = 0; i < 121; i++) {
 
 
     // if is a clickable square not row or column
-    let row = Math.floor(i/11);
+    let row = Math.floor(i/11) - 1;
     let col = i % 11;
 
-    if (row > 0 && col > 0) {
+    if (row >= 0 && col > 0) {
       const rowClass = numberToLetter(row); // A–J
       const colClass = col.toString();      // 1–10
   
       playerSquare.classList.add(rowClass, colClass, "gameSquare", i);
+      cpuSquare.style.backgroundColor = "blue";
       cpuSquare.classList.add(rowClass, colClass, "gameSquare", i);
 
     }
@@ -132,16 +133,18 @@ export function gameStartDOM() {
   const instructions = document.createElement("h2");
   instructions.textContent = "Click a square to place ship!";
   container.appendChild(instructions);
-
-  const button = document.createElement("button");
-  button.textContent = "Place Ship"
-  container.appendChild(button);
 }
 
 function placeShip(square) {
+  if(player.board.totalShips == 5) return;
   const squareCoords = square.classList;
   let squareColumn = letterToNumber(squareCoords[0]);
-  let coords = [squareCoords[0] + squareCoords[1]]; // eg ["A1"]
+  let coord = squareCoords[0] + squareCoords[1]; // eg ["A1"]
+  let coords = [];
+
+  if (player.board.board.get(coord)) { //already ship here\
+    return;
+  }
 
   const playersBoard = player.board;
 
@@ -153,11 +156,21 @@ function placeShip(square) {
     case 3: shipLength = 3; break;
     case 4: shipLength = 2; break;
   }
+  
 
-  for(let i = 0; i < shipLength-1; i++) {
-    squareColumn = squareColumn + 1;
+  for(let i = 0; i < shipLength; i++) {
     let squareColumnLetter = numberToLetter(squareColumn);
-    let nextSquare = document.querySelector(".a.currentthing+11")
-    if(document.querySelector)
+    let nextSquare = [...document.querySelectorAll(`.${squareColumnLetter}`)]
+  .find(el => el.classList.contains(squareCoords[1])); // ["A6"] becomes ["B6"]
+
+    if(nextSquare) {
+      nextSquare.style.backgroundColor = "green"; // for testing purposes
+      coords.push(nextSquare.classList[0] + nextSquare.classList[1]);
+    } else {
+      return;
+    }
+    squareColumn += 1;
   }
+  player.board.placeShip(coords);
+
 }
