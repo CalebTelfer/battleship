@@ -1,4 +1,4 @@
-import { gameState, player } from ".";
+import { cpu, gameState, player } from ".";
 
 export function numberToLetter(n) {
     if (n >= 0 && n < 26) {
@@ -61,9 +61,14 @@ for (let i = 0; i < 121; i++) {
       const rowClass = numberToLetter(row); // A–J
       const colClass = col.toString();      // 1–10
   
-      playerSquare.classList.add(rowClass, colClass, "gameSquare", i);
+      playerSquare.classList.add("playerGameSquare");
+      playerSquare.setAttribute("data-row", rowClass);
+      playerSquare.setAttribute("data-column", colClass);
+
       cpuSquare.style.backgroundColor = "blue";
-      cpuSquare.classList.add(rowClass, colClass, "gameSquare", i);
+      cpuSquare.setAttribute("data-row", rowClass);
+      cpuSquare.setAttribute("data-column", colClass);
+      cpuSquare.classList.add("cpuGameSquare");
 
     }
 
@@ -127,6 +132,7 @@ for (let i = 0; i < 121; i++) {
 
 
 export function gameStartDOM() {
+  populateCPUBoard();
   document.querySelector("#start-button").remove();
 
   const container = document.querySelector(".buttons-container");
@@ -172,5 +178,82 @@ function placeShip(square) {
     squareColumn += 1;
   }
   player.board.placeShip(coords);
+  if (player.board.totalShips == 5) {
+    const container = document.querySelector(".buttons-container");
+    while (container.firstChild) {
+      container.removeChild(container.firstChild);
+    }
 
+    gameState.cpuPlacingShip = true;
+    populateCPUBoard();
+  }
+
+}
+
+function populateCPUBoard() {
+  const cpuBoard = cpu.board;
+  let shipLength;
+
+  if (!cpuBoard) {return;}
+  if (cpuBoard.totalShips >=5) {return;}
+
+  switch (cpuBoard.totalShips) {
+    case 0: shipLength = 5; break;
+    case 1: shipLength = 4; break;
+    case 2: shipLength = 3; break;
+    case 3: shipLength = 3; break;
+    case 4: shipLength = 2; break;
+  }
+
+  console.log(cpu.board.totalShips)
+  let coord = generateCoord();
+
+  while(cpu.board.board.get(coord)) { // keep generating till we get something not in use.
+    coord = generateCoord();
+  }
+
+  let coordRow = coord.slice(0,1);
+  let coordCol = coord.slice(1);
+  let coordSquare = document.querySelector(`.cpuGameSquare[data-row="${coordRow}"][data-column="${coordCol}"]`);
+
+  let squares = [coordSquare];
+  let coords = [coord];
+  console.log(coord);
+  for (let i = 0; i < shipLength-1; i++) {
+    let nextColumn = squares[i].dataset.column;
+    let nextRow = numberToLetter(letterToNumber(squares[i].dataset.row) + 1);
+    let nextCoord = nextRow + nextColumn;
+
+    let nextSquare = document.querySelector(`.cpuGameSquare[data-row="${nextRow}"][data-column="${nextColumn}"]`);
+
+    if (nextSquare && !cpu.board.board.get(nextCoord)) {
+      squares.push(nextSquare);
+      coords.push(nextRow+nextColumn);
+    } else {
+      console.log("no squares")
+      // There is no valid squares down the y axis. Restart
+      populateCPUBoard();
+      return;
+    }
+  }
+
+  // Ship creation a success!
+  console.log("ship made")
+  squares.forEach(square => {
+    square.style.backgroundColor = "green"; //temporary for visual testing
+  })
+
+  cpu.board.placeShip(coords);
+  populateCPUBoard(); //begin creating the next ships
+}
+
+
+
+function generateCoord() {
+  let ranLetter = numberToLetter(Math.floor(Math.random() * 10));
+  let ranNum = Math.floor(Math.random() * 10) + 1;
+
+  let coord = ranLetter + ranNum;
+
+  return coord; // ex: "A1"
 }
