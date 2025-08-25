@@ -91,27 +91,7 @@ for (let i = 0; i < 121; i++) {
       }
 
       if(gameState.playerFiring) {
-        //player firing at this square.
-        let board = cpu.board;
-        let row = e.target.dataset.row;
-        let column = e.target.dataset.column;
-
-        let coord = row+column;
-
-        if (board.receiveAttack(coord)) {
-          //successfull hit
-          e.target.style.backgroundColor = "red"; //temp for visual
-
-          if (board.allShipsSunk()) {
-            //Player has sunk all CPU ships
-            endGame();
-          }
-
-        } else {
-          gameState.playerFiring = false;
-          cpuFire();
-        }
-      }
+        playerFire(e.target);
     });
 
     playerBoard.appendChild(playerSquare);
@@ -186,6 +166,33 @@ function placeShip(square) {
   if (board.totalShips == 5) {populateCPUBoard();}
 }
 
+//////////////////////
+//PC FIRE AT SQUARE
+//////////////////////
+
+function playerFire(square) {
+  //player firing at this square.
+  let board = cpu.board;
+  let row = e.target.dataset.row;
+  let column = e.target.dataset.column;
+
+  let coord = row+column;
+
+  if (board.receiveAttack(coord)) {
+    //successfull hit
+    e.target.style.backgroundColor = "red"; //temp for visual
+
+    if (board.allShipsSunk()) {
+      //Player has sunk all CPU ships
+      endGame();
+    }
+
+  } else {
+    gameState.playerFiring = false;
+    cpuFire();
+  }
+}
+
 
 
 
@@ -249,21 +256,9 @@ function populateCPUBoard() {
 }
 
 
-
-
-
-
-// GENERATE COORD FOR CPU
-function generateCoord() {
-  let ranLetter = numberToLetter(Math.floor(Math.random() * 10));
-  let ranNum = Math.floor(Math.random() * 10) + 1;
-
-  let coord = ranLetter + ranNum;
-
-  return coord; // ex: "A1"
-}
-
-
+//////////////
+// CPU FIRE
+/////////////
 function cpuFire() {
 
   let board = player.board;
@@ -288,6 +283,24 @@ function cpuFire() {
   }
 }
 
+///////////////
+//UTILITY/////
+//////////////
+
+// GENERATE COORD FOR CPU
+function generateCoord() {
+  let ranLetter = numberToLetter(Math.floor(Math.random() * 10));
+  let ranNum = Math.floor(Math.random() * 10) + 1;
+
+  let coord = ranLetter + ranNum;
+
+  return coord; // ex: "A1"
+}
+
+
+//////////////////
+// DOM STUFF ////
+/////////////////
 function endGame() {
   //change DOM to default. Maybe new method here.
 
