@@ -112,6 +112,20 @@ for (let i = 0; i < 121; i++) {
 
         if(gameState.playerFiring) {
           //player firing at this square.
+          let board = cpu.board;
+          let row = e.target.dataset.row;
+          let column = e.target.dataset.column;
+
+          let coord = row+column;
+
+          if (board.receiveAttack(coord)) {
+            //successfull hit
+            e.target.style.backgroundColor = "red"; //temp for visual
+          } else {
+            gameState.playerFiring = false;
+            gameState.cpuFiring = true;
+            cpuFire();
+          }
         }
       }
 
@@ -272,4 +286,26 @@ function generateCoord() {
   let coord = ranLetter + ranNum;
 
   return coord; // ex: "A1"
+}
+
+
+function cpuFire() {
+
+  let board = player.board;
+
+  let coord = generateCoord();
+
+  let row = coord.slice(0,1);
+  let column = coord.slice(1);
+
+  if(board.receiveAttack(coord)) {
+    let square = document.querySelector(`.playerGameSquare[data-row="${row}"][data-column="${column}"]`);
+    square.style.backgroundColor = "red"; //temp for visuals
+    cpuFire(); // fire again since successfull hit.
+  } else {
+    gameState.cpuFiring = false;
+    gameState.playerFiring = true;
+  }
+
+
 }
