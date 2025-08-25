@@ -90,13 +90,13 @@ for (let i = 0; i < 121; i++) {
         return;
       }
 
-      if(gameState.playerFiring) {
+      if (gameState.playerFiring) {
         playerFire(e.target);
-    });
+      }
 
-    playerBoard.appendChild(playerSquare);
-    cpuBoard.appendChild(cpuSquare);
-}
+      playerBoard.appendChild(playerSquare);
+      cpuBoard.appendChild(cpuSquare);
+    });
 }
 
 
@@ -173,14 +173,14 @@ function placeShip(square) {
 function playerFire(square) {
   //player firing at this square.
   let board = cpu.board;
-  let row = e.target.dataset.row;
-  let column = e.target.dataset.column;
+  let row = square.dataset.row;
+  let column = square.dataset.column;
 
   let coord = row+column;
 
   if (board.receiveAttack(coord)) {
     //successfull hit
-    e.target.style.backgroundColor = "red"; //temp for visual
+    square.style.backgroundColor = "red"; //temp for visual
 
     if (board.allShipsSunk()) {
       //Player has sunk all CPU ships
@@ -303,6 +303,25 @@ function generateCoord() {
 /////////////////
 function endGame() {
   //change DOM to default. Maybe new method here.
+  let gameInfo = document.querySelector('.buttons-container h2');
+  gameInfo.textContent = "Click a square to place ship!";
 
+  let playerSquares = document.querySelectorAll(".playerGameSquare");
+  let cpuSquares = document.querySelectorAll(".cpuGameSquare");
+
+  //reset colours on grids to default.
+  playerSquares.forEach(square => {
+    square.style.backgroundColor = "purple";
+  });
+
+  cpuSquares.forEach(square => {
+  square.style.backgroundColor = "purple";
+  });
+
+  cpu.board = new Gameboard();
+  player.board = new Gameboard();
+
+
+  gameState.playerPlacingShip = true;
 
 }
