@@ -77,25 +77,11 @@ for (let i = 0; i < 121; i++) {
           return;
         }
 
-        if (!gameState.playerMove) {
-          if(gameState.cpuPlacingShip) {
-            //cpu trying to place ship on wrong board.
-            return;
-          }
-
-          if(gameState.cpuFiring) {
-            //CPU firing at this square.
-          }
-        }
-
-
-        if (gameState.playerMove) {
-          if (gameState.playerPlacingShip) {
-            //place player ship
-            placeShip(e.target);
-          } else {
-            return; // else firing at own board
-          }
+        if (gameState.playerPlacingShip) {
+          //place player ship
+          placeShip(e.target);
+        } else {
+          return; // else firing at own board
         }
     });
 
@@ -104,43 +90,26 @@ for (let i = 0; i < 121; i++) {
         return;
       }
 
-      if (!gameState.cpuMove) {
-        if(gameState.playerPlacingShip) {
-          //player trying to place ship on wrong board.
-          return;
-        }
+      if(gameState.playerFiring) {
+        //player firing at this square.
+        let board = cpu.board;
+        let row = e.target.dataset.row;
+        let column = e.target.dataset.column;
 
-        if(gameState.playerFiring) {
-          //player firing at this square.
-          let board = cpu.board;
-          let row = e.target.dataset.row;
-          let column = e.target.dataset.column;
+        let coord = row+column;
 
-          let coord = row+column;
+        if (board.receiveAttack(coord)) {
+          //successfull hit
+          e.target.style.backgroundColor = "red"; //temp for visual
 
-          if (board.receiveAttack(coord)) {
-            //successfull hit
-            e.target.style.backgroundColor = "red"; //temp for visual
-
-            if (board.allShipsSunk()) {
-              //Player has sunk all CPU ships
-              endGame();
-            }
-
-          } else {
-            gameState.playerFiring = false;
-            gameState.cpuFiring = true;
-            cpuFire();
+          if (board.allShipsSunk()) {
+            //Player has sunk all CPU ships
+            endGame();
           }
-        }
-      }
 
-
-      if (gameState.cpuMove) {
-        if (gameState.cpuPlacingShip) {
-          //place cpu ship
         } else {
-          return; // else firing at own board
+          gameState.playerFiring = false;
+          cpuFire();
         }
       }
     });
@@ -315,11 +284,12 @@ function cpuFire() {
 
     cpuFire(); // fire again since successfull hit.
   } else {
-    gameState.cpuFiring = false;
     gameState.playerFiring = true;
   }
 }
 
 function endGame() {
-  
+  //change DOM to default. Maybe new method here.
+
+
 }

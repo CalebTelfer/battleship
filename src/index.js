@@ -8,14 +8,9 @@ import { gameStartDOM, initBoardSquares, numberToLetter } from "./functions.js";
 export const gameState = {
     gameStarted: false,
 
-    playerMove: false,
-    cpuMove: false,
-
     playerPlacingShip: false,
-    cpuPlacingShip: false,
 
-    playerFiring: false,
-    cpuFiring: false
+    playerFiring: false
 }
 
 export const player = new Player();
@@ -27,7 +22,6 @@ const startButton = document.querySelector("#start-button");
 
 startButton.addEventListener("click", (e) => {
     gameState.gameStarted = true;
-    gameState.playerMove = true;
     gameState.playerPlacingShip = true;
 
     gameStartDOM();
