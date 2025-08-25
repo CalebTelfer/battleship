@@ -121,6 +121,12 @@ for (let i = 0; i < 121; i++) {
           if (board.receiveAttack(coord)) {
             //successfull hit
             e.target.style.backgroundColor = "red"; //temp for visual
+
+            if (board.allShipsSunk()) {
+              //Player has sunk all CPU ships
+              endGame();
+            }
+
           } else {
             gameState.playerFiring = false;
             gameState.cpuFiring = true;
@@ -301,11 +307,19 @@ function cpuFire() {
   if(board.receiveAttack(coord)) {
     let square = document.querySelector(`.playerGameSquare[data-row="${row}"][data-column="${column}"]`);
     square.style.backgroundColor = "red"; //temp for visuals
+
+    if (board.allShipsSunk()) {
+      endGame();
+      return;
+    }
+
     cpuFire(); // fire again since successfull hit.
   } else {
     gameState.cpuFiring = false;
     gameState.playerFiring = true;
   }
+}
 
-
+function endGame() {
+  
 }
