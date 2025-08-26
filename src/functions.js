@@ -17,10 +17,10 @@ export function letterToNumber(letter) {
 
 export function initBoardSquares() {
   //populate grid w javascript. not making 100 squares manually
-const playerBoard = document.querySelector(".player-board");
-const cpuBoard = document.querySelector(".cpu-board");
+  const playerBoard = document.querySelector(".player-board");
+  const cpuBoard = document.querySelector(".cpu-board");
 
-for (let i = 0; i < 121; i++) {
+  for (let i = 0; i < 121; i++) {
     let playerSquare = document.createElement("div");
     let cpuSquare = document.createElement("div");
 
@@ -97,6 +97,8 @@ for (let i = 0; i < 121; i++) {
       playerBoard.appendChild(playerSquare);
       cpuBoard.appendChild(cpuSquare);
     });
+  }
+  
 }
 
 
@@ -159,7 +161,7 @@ function placeShip(square) {
 
   squares.forEach(square => {
     square.style.backgroundColor = "green"; //temporary for visual testing
-  })
+  });
 
   board.placeShip(coords);
 
@@ -214,7 +216,7 @@ function populateCPUBoard() {
     case 4: shipLength = 2; break;
   }
 
-  console.log(cpu.board.totalShips)
+  console.log(cpu.board.totalShips);
   let coord = generateCoord();
 
   while(cpu.board.board.get(coord)) { // keep generating till we get something not in use.
