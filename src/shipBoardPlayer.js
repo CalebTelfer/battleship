@@ -38,6 +38,7 @@ export class Gameboard {
         });
 
         this.totalShips += 1;
+        this.aliveShips+= 1;
         return ship;
     }
 

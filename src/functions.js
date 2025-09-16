@@ -1,4 +1,5 @@
 import { cpu, gameState, player } from ".";
+import { Gameboard } from "./shipBoardPlayer";
 
 export function numberToLetter(n) {
     if (n >= 0 && n < 26) {
@@ -94,9 +95,10 @@ export function initBoardSquares() {
         playerFire(e.target);
       }
 
-      playerBoard.appendChild(playerSquare);
-      cpuBoard.appendChild(cpuSquare);
     });
+
+    playerBoard.appendChild(playerSquare);
+    cpuBoard.appendChild(cpuSquare);
   }
   
 }
@@ -173,6 +175,7 @@ function placeShip(square) {
 //////////////////////
 
 function playerFire(square) {
+  if (!gameState.playerFiring) {return;} // how did we get here?
   //player firing at this square.
   let board = cpu.board;
   let row = square.dataset.row;
@@ -206,7 +209,15 @@ function populateCPUBoard() {
   let shipLength;
 
   if (!cpuBoard) {return;}
-  if (cpuBoard.totalShips >=5) {return;}
+  if (cpuBoard.totalShips >=5) {
+    //update dom continue
+    let instructionText = document.querySelector(".buttons-container h2");
+    instructionText.textContent = "Your turn to attack!";
+
+    gameState.playerFiring = true;
+
+    return;
+  }
 
   switch (cpuBoard.totalShips) {
     case 0: shipLength = 5; break;
@@ -262,16 +273,22 @@ function populateCPUBoard() {
 // CPU FIRE
 /////////////
 function cpuFire() {
-
+  console.log("test")
   let board = player.board;
 
   let coord = generateCoord();
 
   let row = coord.slice(0,1);
   let column = coord.slice(1);
+  let square = document.querySelector(`.playerGameSquare[data-row="${row}"][data-column="${column}"]`);
+
+  if (board.board.get(coord)?.isHit) { //dont hit the same spot again
+    cpuFire();
+    return;
+  }
 
   if(board.receiveAttack(coord)) {
-    let square = document.querySelector(`.playerGameSquare[data-row="${row}"][data-column="${column}"]`);
+    
     square.style.backgroundColor = "red"; //temp for visuals
 
     if (board.allShipsSunk()) {
@@ -281,6 +298,7 @@ function cpuFire() {
 
     cpuFire(); // fire again since successfull hit.
   } else {
+    square.style.backgroundColor = "yellow"; //temp for visuals
     gameState.playerFiring = true;
   }
 }
